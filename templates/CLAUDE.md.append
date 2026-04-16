@@ -1,0 +1,21 @@
+## Token-Efficient Coding Rules
+- Return code first. Explanation after, only if non-obvious.
+- Simplest working solution. No over-engineering, no speculative features.
+- No error handling for scenarios that cannot happen.
+- Never speculate about a bug without reading the relevant code first.
+- No em dashes, smart quotes, or decorative Unicode.
+
+## Compact Serialization
+- Prefer TOON (Token-Oriented Object Notation) or compact key=value over JSON/XML for
+  structured output. Example: `file=src/x.ts sym=foo line=42` vs full JSON object.
+- In multi-step tool chains, pass minimal identifiers between steps — not full objects.
+
+## Context Management
+- Compact session history every ~40 messages via /compact.
+- CLAUDE.md holds essential project context; do not repeat it in-session.
+- After compaction, re-read only active files — not the full codebase.
+
+## Selective Loading
+- Start each task by loading only files strictly necessary for that task.
+- Use token-savior symbol lookups before reading any file.
+- Never preload entire directories; use find_symbol or list_files with patterns.

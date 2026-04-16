@@ -162,3 +162,54 @@ RTK compresses noisy CLI output (git, cargo, docker, pytest) by 60-90% before it
 | Notes | **Obsidian vault** | Pre-built answers vs. re-reading |
 
 Install rtk (Linux/macOS): `curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh`
+
+### [jCodeMunch](https://j.gravelle.us/jCodeMunch) — Symbol-Level MCP (99.8% on FastAPI)
+jCodeMunch is an MCP server for surgical symbol retrieval. Benchmarked 99.8% reduction on
+FastAPI (214,312 → 480 tokens per query). Complements token-savior.
+
+```bash
+pip install git+https://github.com/jgravelle/jcodemunch-mcp.git
+```
+
+See `docs/rtk-install.md` for Claude Code + Codex registration steps.
+
+### [claude-token-efficient](https://github.com/drona23/claude-token-efficient) — Output Verbosity Profiles
+Drop-in CLAUDE.md profiles that reduce output verbosity. Layers with this stack:
+- This repo reduces *input* tokens (avoid reading full files)
+- claude-token-efficient reduces *output* tokens (response length)
+
+```bash
+git clone https://github.com/drona23/claude-token-efficient /tmp/claude-token-efficient
+cat /tmp/claude-token-efficient/profiles/CLAUDE.coding.md >> your-project/CLAUDE.md
+```
+
+See `docs/claude-token-efficient.md` for full integration guide.
+
+## Additional Techniques
+
+### AGENTS.md Template
+For Codex CLI and other agent tools, use the provided AGENTS.md template (`templates/AGENTS.md`)
+in place of or alongside CLAUDE.md. It includes:
+- Structured-output-only mode (no prose in agent responses)
+- token-savior tool priority chain (find_symbol first, file reads last)
+- Compact Serialization rules
+
+### Compact Serialization (TOON)
+Use Token-Oriented Object Notation in agent pipelines instead of JSON:
+```
+# JSON (verbose)
+{"file": "src/auth.ts", "symbol": "verifyToken", "line": 42}
+
+# TOON (compact)
+file=src/auth.ts sym=verifyToken line=42
+```
+Add `templates/CLAUDE.md.append` to any project CLAUDE.md for these rules.
+
+### Context Management
+- Compact session history every ~40 messages via `/compact`
+- CLAUDE.md is the only persistent context — don't repeat it in-session
+- After compaction, re-read only active files
+
+### Selective Loading
+- Use token-savior `find_symbol` / `get_function_source` before any file read
+- Never preload entire directories; use `list_files` with patterns
