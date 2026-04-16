@@ -147,3 +147,18 @@ Built on top of:
 - [token-savior](https://pypi.org/project/token-savior/) — structural code indexer with MCP
 - [LightRAG](https://github.com/hkuds/lightrag) — fast graph-based RAG
 - [sentence-transformers](https://www.sbert.net/) — free local embeddings
+
+## Works Great With
+
+### [rtk](https://github.com/rtk-ai/rtk) — Command Output Filter (Rust)
+RTK compresses noisy CLI output (git, cargo, docker, pytest) by 60-90% before it hits Claude's context. Pair it with this stack for maximum savings:
+
+| Layer | Tool | What it saves |
+|-------|------|--------------|
+| Command output | **rtk** | Filters verbose CLI noise |
+| Symbol lookups | **token-savior** | Skips file reads for definitions |
+| Semantic queries | **LightRAG** | Replaces reading whole files |
+| Architecture | **graphify** | Pre-built graph vs. exploring code |
+| Notes | **Obsidian vault** | Pre-built answers vs. re-reading |
+
+Install rtk (Linux/macOS): `curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh`
