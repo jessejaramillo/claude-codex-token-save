@@ -1,0 +1,5 @@
+lightrag-hku>=1.4.14
+sentence-transformers>=5.4.0
+token-savior>=1.0.0
+graphifyy>=0.4.13
+python-dotenv>=1.0.0
